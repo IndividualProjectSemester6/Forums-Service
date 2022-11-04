@@ -25,7 +25,7 @@ namespace ForumsService.API.Controllers
             List<ForumViewModel> forums = new List<ForumViewModel>();
             foreach (var forum in result)
             {
-                forums.Add(new ForumViewModel(forum.Id, forum.Name, forum.Description, forum.Rules));
+                forums.Add(new ForumViewModel(forum.Id, forum.Name, forum.Description));
             }
 
             return Ok(forums);

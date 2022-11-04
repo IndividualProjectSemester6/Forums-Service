@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ForumsService.Application\ForumsService.Application.csproj" />
+    <ProjectReference Include="..\ForumsService.Infrastructure\ForumsService.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
