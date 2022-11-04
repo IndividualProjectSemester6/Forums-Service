@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  forumsservice.api:
+    image: ${DOCKER_REGISTRY-}forumsserviceapi
+    build:
+      context: .
+      dockerfile: src/ForumsService.API/Dockerfile
