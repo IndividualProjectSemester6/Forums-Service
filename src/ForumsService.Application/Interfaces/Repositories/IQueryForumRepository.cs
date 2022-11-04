@@ -2,7 +2,7 @@
 
 namespace ForumsService.Application.Interfaces.Repositories
 {
-    public interface IQueryMovieRepository
+    public interface IQueryForumRepository
     {
         Task<IEnumerable<ForumDto>> GetAll();
         Task<ForumDto?> Get(Guid id);
