@@ -5,17 +5,18 @@ WORKDIR /app
 EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["ForumsService.csproj", "."]
-RUN dotnet restore "./ForumsService.csproj"
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "ForumsService.csproj" -c Release -o /app/build
+
+# Restore project
+RUN dotnet restore "src/ForumsService.API/ForumsService.API.csproj"
+
+# Build project
+RUN dotnet build "src/ForumsService.API/ForumsService.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ForumsService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "src/ForumsService.API/ForumsService.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ForumsService.dll"]
+ENTRYPOINT ["dotnet", "ForumsService.API.dll"]
