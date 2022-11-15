@@ -1,5 +1,6 @@
 ﻿using ForumsService.API.Models;
 using ForumsService.Application.Queries.GetAllForums;
+using ForumsService.Application.Queries.GetForum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,19 @@ namespace ForumsService.API.Controllers
             }
 
             return Ok(forums);
+        }
+
+        [HttpGet("{forumId}")]
+        public async Task<ActionResult> Get(Guid forumId)
+        {
+            var result = await _mediator.Send(new GetForumQuery(forumId));
+            if (result != null)
+            {
+                var forum = new ForumViewModel(result.Id, result.Name, result.Description);
+                return Ok(forum);
+            }
+
+            return NotFound();
         }
     }
 }
