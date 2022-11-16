@@ -1,7 +1,9 @@
 ﻿using ForumsService.API.Models;
 using ForumsService.Application.Commands.CreateForum;
+using ForumsService.Application.Commands.UpdateForum;
 using ForumsService.Application.Queries.GetAllForums;
 using ForumsService.Application.Queries.GetForum;
+using ForumsService.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +55,17 @@ namespace ForumsService.API.Controllers
             var result = await _mediator.Send(command);
 
             if (result == null) return BadRequest();
+
+            return Ok(result);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Update(ForumViewModel forum)
+        {
+            var existingForum = new ForumDto(forum.Id, forum.Name, forum.Description);
+            var command = new UpdateForumCommand(existingForum);
+            var result = await _mediator.Send(command);
+            if (result == null) return NotFound();
 
             return Ok(result);
         }

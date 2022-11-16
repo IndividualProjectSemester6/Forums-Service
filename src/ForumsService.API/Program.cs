@@ -20,7 +20,8 @@ builder.Services.AddMediatR(new Type[]
 {
     typeof(QueriesMediatR.GetAllForums.GetAllForumsQuery),
     typeof(QueriesMediatR.GetForum.GetForumQuery),
-    typeof(CommandsMediatR.CreateForum.CreateForumCommand)
+    typeof(CommandsMediatR.CreateForum.CreateForumCommand),
+    typeof(CommandsMediatR.UpdateForum.UpdateForumCommand),
 });
 
 // Dependency injection:
