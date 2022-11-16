@@ -4,6 +4,7 @@ using ForumsService.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QueriesMediatR = ForumsService.Application.Queries;
+using CommandsMediatR = ForumsService.Application.Commands;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +18,14 @@ builder.Services.AddSwaggerGen();
 // Add MediatR + dependencies:
 builder.Services.AddMediatR(new Type[]
 {
-    typeof(QueriesMediatR.GetAllForums.GetAllForumsQuery)
+    typeof(QueriesMediatR.GetAllForums.GetAllForumsQuery),
+    typeof(QueriesMediatR.GetForum.GetForumQuery),
+    typeof(CommandsMediatR.CreateForum.CreateForumCommand)
 });
 
 // Dependency injection:
 builder.Services.AddScoped<IQueryForumRepository, QueryForumRepository>();
+builder.Services.AddScoped<ICommandForumRepository, CommandForumRepository>();
 
 ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 

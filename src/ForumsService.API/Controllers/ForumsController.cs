@@ -1,4 +1,5 @@
 ﻿using ForumsService.API.Models;
+using ForumsService.Application.Commands.CreateForum;
 using ForumsService.Application.Queries.GetAllForums;
 using ForumsService.Application.Queries.GetForum;
 using MediatR;
@@ -43,6 +44,17 @@ namespace ForumsService.API.Controllers
             }
 
             return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Create(CreateForumViewModel forumViewModel)
+        {
+            var command = new CreateForumCommand(forumViewModel.Name, forumViewModel.Description);
+            var result = await _mediator.Send(command);
+
+            if (result == null) return BadRequest();
+
+            return Ok(result);
         }
     }
 }
