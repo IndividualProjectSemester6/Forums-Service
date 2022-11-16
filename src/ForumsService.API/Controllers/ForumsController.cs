@@ -1,5 +1,6 @@
 ﻿using ForumsService.API.Models;
 using ForumsService.Application.Commands.CreateForum;
+using ForumsService.Application.Commands.DeleteForum;
 using ForumsService.Application.Commands.UpdateForum;
 using ForumsService.Application.Queries.GetAllForums;
 using ForumsService.Application.Queries.GetForum;
@@ -66,6 +67,15 @@ namespace ForumsService.API.Controllers
             var command = new UpdateForumCommand(existingForum);
             var result = await _mediator.Send(command);
             if (result == null) return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpDelete("{forumId}")]
+        public async Task<ActionResult> Delete(Guid forumId)
+        {
+            var result = await _mediator.Send(new DeleteForumCommand(forumId));
+            if (result == null) return BadRequest();
 
             return Ok(result);
         }

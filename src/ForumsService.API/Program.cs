@@ -22,6 +22,7 @@ builder.Services.AddMediatR(new Type[]
     typeof(QueriesMediatR.GetForum.GetForumQuery),
     typeof(CommandsMediatR.CreateForum.CreateForumCommand),
     typeof(CommandsMediatR.UpdateForum.UpdateForumCommand),
+    typeof(CommandsMediatR.DeleteForum.DeleteForumCommand)
 });
 
 // Dependency injection:
