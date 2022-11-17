@@ -30,7 +30,7 @@ builder.Services.AddScoped<IQueryForumRepository, QueryForumRepository>();
 builder.Services.AddScoped<ICommandForumRepository, CommandForumRepository>();
 
 ConfigurationManager configuration = builder.Configuration;
-builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AzureConnection"), 
     b=>b.MigrationsAssembly("ForumsService.API").EnableRetryOnFailure())
 );
 
