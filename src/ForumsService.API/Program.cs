@@ -30,11 +30,18 @@ builder.Services.AddScoped<IQueryForumRepository, QueryForumRepository>();
 builder.Services.AddScoped<ICommandForumRepository, CommandForumRepository>();
 
 ConfigurationManager configuration = builder.Configuration;
-builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), 
+builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AzureConnection"), 
     b=>b.MigrationsAssembly("ForumsService.API").EnableRetryOnFailure())
+
 );
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ForumDbContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
