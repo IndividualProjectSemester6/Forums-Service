@@ -18,6 +18,7 @@ spec:
       containers:
         - name: forums-api
           image: kinoroomregistry.azurecr.io/forumsservice:latest
+          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 80
           resources:

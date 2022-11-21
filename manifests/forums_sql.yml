@@ -1,0 +1,73 @@
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forums-sql-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mssql
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: mssql
+        spec:
+          terminationGracePeriodSeconds: 10
+          securityContext:
+            fsGroup: 1000
+          containers:
+          - name: forums_db
+            image: mcr.microsoft.com/mssql/server:2022-latest
+            env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: MSSQL_SA_PASSWORD
+              value: Admin123!
+            volumeMounts:
+            - name: mssqldb
+              mountPath: /var/opt/mssql
+          volumes:
+          - name: mssqldb
+            persistentVolumeClaim:
+              claimName: mssql-data-pvc
+---
+# Persistent Storage Volume:
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: azure-disk
+provisioner: kubernetes.io/azure-disk
+parameters:
+  storageaccounttype: Standard_LRS
+  kind: Managed
+---
+# Persistent Volume Claim:
+kind: PersistentVolumeClaim
+apiVersion: apps/v1
+metadata:
+  name: mssql-data-pvc
+  annotations:
+    volume.beta.kubernetes.io/storage-class: azure-disk
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+---
+# Load balancer:
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: mssql-service
+spec:
+  selector:
+    app: mssql
+  ports:
+    - protocol: TCP
+      port: 1434
+      targetPort: 1433
+  type: LoadBalancer

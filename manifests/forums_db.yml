@@ -62,7 +62,7 @@ spec:
             memory: 200Mi
         env:
         - name: MSSQL_SA_PASSWORD
-          value: "Admin123!"
+          value: Admin123!
         - name: ACCEPT_EULA
           value: "Y"
         - name: FORUM_DB
