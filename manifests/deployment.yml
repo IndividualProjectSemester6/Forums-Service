@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forums-api
+  labels:
+    app: forums-api
+spec:
+  replicas: 3 
+  selector:
+    matchLabels:
+      app: forums-api
+  template:
+    metadata:
+      labels:
+        app: forums-api
+    spec:
+      containers:
+        - name: forums-api
+          image: kinoroomregistry.azurecr.io/forumsservice:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
