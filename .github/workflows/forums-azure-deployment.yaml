@@ -2,7 +2,7 @@ name: forums-azure-deployment
 "on":
     push:
         branches:
-            - azure-deployment
+            - main
     workflow_dispatch: {}
 env:
     ACR_RESOURCE_GROUP: general-kinoroom-prod-westeu-001
@@ -57,4 +57,4 @@ jobs:
                 action: deploy
                 images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }}
                 manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
-                namespace: kinoroom
+                namespace: default
