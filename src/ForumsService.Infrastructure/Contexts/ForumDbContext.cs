@@ -17,8 +17,8 @@ namespace ForumsService.Infrastructure.Contexts
                 new ForumDto(Guid.NewGuid(), "dune_forum", "A Forum for the Dune movie."),
                 new ForumDto(Guid.NewGuid(), "sw_forum", "A Forum for the Star Wars movies."),
                 new ForumDto(Guid.NewGuid(), "hp_forum", "A Forum for the Harry Potter movies."));
-
         }
+
 
         public DbSet<ForumDto> Forums { get; set; }
     }

@@ -3,6 +3,7 @@ using ForumsService.Infrastructure.Contexts;
 using ForumsService.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using QueriesMediatR = ForumsService.Application.Queries;
 using CommandsMediatR = ForumsService.Application.Commands;
 
@@ -30,10 +31,16 @@ builder.Services.AddScoped<IQueryForumRepository, QueryForumRepository>();
 builder.Services.AddScoped<ICommandForumRepository, CommandForumRepository>();
 
 ConfigurationManager configuration = builder.Configuration;
-builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("AzureConnection"), 
-    b=>b.MigrationsAssembly("ForumsService.API").EnableRetryOnFailure())
 
-);
+// Add database context:
+builder.Services.AddDbContext<ForumDbContext>(b =>
+{
+    var connectionString = configuration.GetConnectionString("MySqlConnection");
+    b.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), o =>
+    {
+        o.MigrationsAssembly("ForumsService.API");
+    });
+});
 
 var app = builder.Build();
 

@@ -3,7 +3,6 @@ using System;
 using ForumsService.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,31 +11,29 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumsService.API.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20221104122909_InitialMigrationLocal")]
-    partial class InitialMigrationLocal
+    [Migration("20221130101647_mysql")]
+    partial class mysql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
-
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ForumsService.Domain.Entities.ForumDto", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
@@ -45,19 +42,19 @@ namespace ForumsService.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1add170e-4bbc-42a8-bce5-5dd26ee08376"),
+                            Id = new Guid("c86946bf-0fc3-4d96-8749-c50b91334538"),
                             Description = "A Forum for the Dune movie.",
                             Name = "dune_forum"
                         },
                         new
                         {
-                            Id = new Guid("c9c43087-ae64-4d37-8874-b8adcd908310"),
+                            Id = new Guid("14ec41f0-9325-4457-9eb2-56ec72fd3e0b"),
                             Description = "A Forum for the Star Wars movies.",
                             Name = "sw_forum"
                         },
                         new
                         {
-                            Id = new Guid("f793b4b2-c484-4571-8e1f-a1f6a1c1250b"),
+                            Id = new Guid("4c6bb740-f042-4e41-a7bd-d21a1be5ee07"),
                             Description = "A Forum for the Harry Potter movies.",
                             Name = "hp_forum"
                         });

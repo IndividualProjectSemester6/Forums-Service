@@ -15,7 +15,8 @@ namespace ForumsService.Application.Commands.CreateForum
 
         public async Task<ForumDto> Handle(CreateForumCommand request, CancellationToken cancellationToken)
         {
-            var forum = new ForumDto(Guid.NewGuid(), request.Name, request.Description);
+            //var forum = new ForumDto(Guid.NewGuid(), request.Name, request.Description);
+            var forum = new ForumDto() { Name = request.Name, Description = request.Description };
             var result = await _repository.CreateForum(forum);
             return result;
         }
