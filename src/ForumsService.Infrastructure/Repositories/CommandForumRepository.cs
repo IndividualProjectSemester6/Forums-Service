@@ -7,9 +7,9 @@ namespace ForumsService.Infrastructure.Repositories
 {
     public class CommandForumRepository : ICommandForumRepository
     {
-        private readonly ForumDbContext _context;
+        private readonly ForumDbWriteContext _context;
 
-        public CommandForumRepository(ForumDbContext context)
+        public CommandForumRepository(ForumDbWriteContext context)
         {
             _context = context;
         }

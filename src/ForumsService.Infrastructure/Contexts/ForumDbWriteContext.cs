@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ForumsService.Infrastructure.Contexts
 {
-    public class ForumDbContext : DbContext
+    public class ForumDbWriteContext : DbContext
     {
-        public ForumDbContext(DbContextOptions<ForumDbContext> options) : 
+        public ForumDbWriteContext(DbContextOptions<ForumDbWriteContext> options) : 
             base(options)
         {
         }

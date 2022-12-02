@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: forums-api
-          image: 192.168.240.4/forums_api:latest
+          image: localhost:5001/forumsservice:latest
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 80

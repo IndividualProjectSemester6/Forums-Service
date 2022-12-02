@@ -32,10 +32,20 @@ builder.Services.AddScoped<ICommandForumRepository, CommandForumRepository>();
 
 ConfigurationManager configuration = builder.Configuration;
 
-// Add database context:
-builder.Services.AddDbContext<ForumDbContext>(b =>
+// Add master database context:
+builder.Services.AddDbContext<ForumDbWriteContext>(b =>
 {
-    var connectionString = configuration.GetConnectionString("MySqlConnection");
+    var connectionString = configuration.GetConnectionString("MySqlMasterConnection");
+    b.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), o =>
+    {
+        o.MigrationsAssembly("ForumsService.API");
+    });
+});
+
+// Add replica databases context:
+builder.Services.AddDbContext<ForumDbReadOnlyContext>(b =>
+{
+    var connectionString = configuration.GetConnectionString("MySqlReplicasConnection");
     b.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), o =>
     {
         o.MigrationsAssembly("ForumsService.API");
@@ -46,8 +56,10 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var dbContext = scope.ServiceProvider.GetRequiredService<ForumDbContext>();
-    dbContext.Database.EnsureCreated();
+    var masterDbContext = scope.ServiceProvider.GetRequiredService<ForumDbWriteContext>();
+    masterDbContext.Database.EnsureCreated();
+    var replicasDbContext = scope.ServiceProvider.GetRequiredService<ForumDbReadOnlyContext>();
+    replicasDbContext.Database.EnsureCreated();
 }
 
 // Configure the HTTP request pipeline.

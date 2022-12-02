@@ -7,9 +7,9 @@ namespace ForumsService.Infrastructure.Repositories
 {
     public class QueryForumRepository : IQueryForumRepository
     {
-        private readonly ForumDbContext _context;
+        private readonly ForumDbReadOnlyContext _context;
 
-        public QueryForumRepository(ForumDbContext context)
+        public QueryForumRepository(ForumDbReadOnlyContext context)
         {
             _context = context;
         }
