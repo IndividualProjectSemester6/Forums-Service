@@ -5,6 +5,10 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using QueriesMediatR = ForumsService.Application.Queries;
 using CommandsMediatR = ForumsService.Application.Commands;
+using MassTransit;
+using ForumsService.Application.Messaging.Consumers;
+using ForumsService.Application.Messaging.Definitions;
+using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +38,26 @@ builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(co
     b=>b.MigrationsAssembly("ForumsService.API").EnableRetryOnFailure())
 
 );
+
+builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<ThreadCreatedConsumer>(typeof(ThreadCreatedConsumerDefinition));
+
+        x.UsingRabbitMq((context, cfg) =>
+        {
+            cfg.Host(configuration.GetValue<string>("MessageBroker:Host"), "/", h =>
+            {
+                h.Username(configuration.GetValue<string>("MessageBroker:Username"));
+                h.Password(configuration.GetValue<string>("MessageBroker:Password"));
+            });
+
+            cfg.ReceiveEndpoint( "thread-created-queue", (c) =>
+            {
+                c.ConfigureConsumer<ThreadCreatedConsumer>(context);
+            });
+        });
+    })
+    .BuildServiceProvider();
 
 var app = builder.Build();
 
