@@ -7,8 +7,7 @@ namespace ForumsService.Domain.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        [NotMapped]
-        public string[] Rules { get; set; }
+        public ICollection<ThreadDto> Threads { get; set; }
 
         public ForumDto(Guid id, string name, string description)
         {
