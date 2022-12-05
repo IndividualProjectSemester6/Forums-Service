@@ -39,5 +39,14 @@ namespace ForumsService.Infrastructure.Repositories
             await _context.SaveChangesAsync();
             return existing;
         }
+
+        public async Task<ForumDto?> AddThreadToForum(ThreadDto thread, Guid forumId)
+        {
+            var existing = await _context.Forums.FindAsync(forumId);
+            if (existing == null) return null;
+            existing.Threads.Add(thread);
+            await _context.SaveChangesAsync();
+            return existing;
+        }
     }
 }
