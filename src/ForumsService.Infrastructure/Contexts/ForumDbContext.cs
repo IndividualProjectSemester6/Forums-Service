@@ -13,11 +13,6 @@ namespace ForumsService.Infrastructure.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ForumDto>().ToTable("Forums");
-            //modelBuilder.Entity<ThreadDto>().ToTable("Threads");
-            /*modelBuilder.Entity<ForumDto>()
-                .HasMany(f => f.Threads)
-                .WithOne(t => t.Forum)
-                .HasForeignKey(t => t.Id);*/
             modelBuilder.Entity<ThreadDto>()
                 .HasOne<ForumDto>(t => t.Forum)
                 .WithMany(f => f.Threads)

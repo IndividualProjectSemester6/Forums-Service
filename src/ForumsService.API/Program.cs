@@ -44,8 +44,6 @@ builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(co
 
 builder.Services.AddMassTransit(x =>
     {
-        //x.AddConsumeObserver<IConsumeObserver>();
-        //x.AddConsumer<ThreadCreatedConsumer>(typeof(ThreadCreatedConsumerDefinition));
         x.AddConsumer(typeof(ThreadCreatedConsumer));
 
         x.UsingRabbitMq((context, cfg) =>
