@@ -7,8 +7,6 @@ using QueriesMediatR = ForumsService.Application.Queries;
 using CommandsMediatR = ForumsService.Application.Commands;
 using MassTransit;
 using ForumsService.Application.Messaging.Consumers;
-using ForumsService.Application.Messaging.Definitions;
-using ForumsService.Application.Messaging.Observers;
 using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
