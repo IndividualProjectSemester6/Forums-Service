@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   forumsservice.api:
-    image: ${DOCKER_REGISTRY-}forumsserviceapi
+    image: localhost:5003/forums_api_rmq:latest
     build:
       context: .
       dockerfile: ./Dockerfile

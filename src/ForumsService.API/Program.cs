@@ -8,13 +8,15 @@ using CommandsMediatR = ForumsService.Application.Commands;
 using MassTransit;
 using ForumsService.Application.Messaging.Consumers;
 using ForumsService.Application.Messaging.Definitions;
+using ForumsService.Application.Messaging.Observers;
 using Shared.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore); ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,7 +28,8 @@ builder.Services.AddMediatR(new Type[]
     typeof(QueriesMediatR.GetForum.GetForumQuery),
     typeof(CommandsMediatR.CreateForum.CreateForumCommand),
     typeof(CommandsMediatR.UpdateForum.UpdateForumCommand),
-    typeof(CommandsMediatR.DeleteForum.DeleteForumCommand)
+    typeof(CommandsMediatR.DeleteForum.DeleteForumCommand),
+    typeof(CommandsMediatR.AddThreadToForum.AddThreadToForumCommand)
 });
 
 // Dependency injection:
@@ -41,7 +44,9 @@ builder.Services.AddDbContext<ForumDbContext>(options => options.UseSqlServer(co
 
 builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<ThreadCreatedConsumer>(typeof(ThreadCreatedConsumerDefinition));
+        //x.AddConsumeObserver<IConsumeObserver>();
+        //x.AddConsumer<ThreadCreatedConsumer>(typeof(ThreadCreatedConsumerDefinition));
+        x.AddConsumer(typeof(ThreadCreatedConsumer));
 
         x.UsingRabbitMq((context, cfg) =>
         {
@@ -51,15 +56,17 @@ builder.Services.AddMassTransit(x =>
                 h.Password(configuration.GetValue<string>("MessageBroker:Password"));
             });
 
-            cfg.ReceiveEndpoint( "thread-created-queue", (c) =>
+
+            cfg.ReceiveEndpoint("thread-created-queue", (c) =>
             {
-                c.ConfigureConsumer<ThreadCreatedConsumer>(context);
+                c.ConfigureConsumers(context);
             });
         });
     })
     .BuildServiceProvider();
 
 var app = builder.Build();
+
 
 using (var scope = app.Services.CreateScope())
 {

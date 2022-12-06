@@ -1,6 +1,7 @@
 ﻿using ForumsService.Application.Interfaces.Repositories;
 using ForumsService.Domain.Entities;
 using ForumsService.Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
 
 namespace ForumsService.Infrastructure.Repositories
@@ -42,9 +43,17 @@ namespace ForumsService.Infrastructure.Repositories
 
         public async Task<ForumDto?> AddThreadToForum(ThreadDto thread, Guid forumId)
         {
+            Console.WriteLine("Pre-forum");
             var existing = await _context.Forums.FindAsync(forumId);
+            //var existing = await _context.Forums.FindAsync(forumId);
+            Console.WriteLine("Forum: " + existing.Id + existing.Name + "Thread ID:" + thread.Id);
             if (existing == null) return null;
-            existing.Threads.Add(thread);
+          
+            Console.WriteLine("Pre thread");
+            thread.Forum = existing;
+            Console.WriteLine("Thread forum:" + thread.Forum);
+            await _context.AddAsync(thread);
+            Console.WriteLine("post thread");
             await _context.SaveChangesAsync();
             return existing;
         }

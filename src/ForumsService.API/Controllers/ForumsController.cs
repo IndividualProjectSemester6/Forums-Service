@@ -30,7 +30,13 @@ namespace ForumsService.API.Controllers
             List<ForumViewModel> forums = new List<ForumViewModel>();
             foreach (var forum in result)
             {
-                forums.Add(new ForumViewModel(forum.Id, forum.Name, forum.Description));
+                List<ThreadReferenceViewModel> threads = new List<ThreadReferenceViewModel>();
+                foreach (var th in forum.Threads)
+                {
+                    var thread = new ThreadReferenceViewModel(th.Id);
+                    threads.Add(thread);
+                }
+                forums.Add(new ForumViewModel(forum.Id, forum.Name, forum.Description, threads));
             }
 
             return Ok(forums);
@@ -42,7 +48,13 @@ namespace ForumsService.API.Controllers
             var result = await _mediator.Send(new GetForumQuery(forumId));
             if (result != null)
             {
-                var forum = new ForumViewModel(result.Id, result.Name, result.Description);
+                List<ThreadReferenceViewModel> threads = new List<ThreadReferenceViewModel>();
+                foreach (var th in result.Threads)
+                {
+                    var thread = new ThreadReferenceViewModel(th.Id);
+                    threads.Add(thread);
+                }
+                var forum = new ForumViewModel(result.Id, result.Name, result.Description, threads);
                 return Ok(forum);
             }
 
