@@ -16,12 +16,15 @@ namespace ForumsService.Infrastructure.Repositories
 
         public async Task<IEnumerable<ForumDto>> GetAll()
         {
-            return await _context.Forums.ToListAsync();
+            var result = await _context.Forums.Include(f => f.Threads).ToListAsync();
+            return result;
         }
 
         public async Task<ForumDto?> Get(Guid id)
         {
-            return await _context.Forums.FindAsync(id);
+            var result = await _context.Forums.Where(f => f.Id == id)
+                .Include("Threads").FirstOrDefaultAsync();
+            return result;
         }
     }
 }

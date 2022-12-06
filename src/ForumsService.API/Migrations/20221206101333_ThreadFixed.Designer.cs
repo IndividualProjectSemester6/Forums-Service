@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumsService.API.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20221104122909_InitialMigrationLocal")]
-    partial class InitialMigrationLocal
+    [Migration("20221206101333_ThreadFixed")]
+    partial class ThreadFixed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,22 +45,54 @@ namespace ForumsService.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1add170e-4bbc-42a8-bce5-5dd26ee08376"),
+                            Id = new Guid("66f9fcc0-ad97-4422-bddd-7c208eef5be5"),
                             Description = "A Forum for the Dune movie.",
                             Name = "dune_forum"
                         },
                         new
                         {
-                            Id = new Guid("c9c43087-ae64-4d37-8874-b8adcd908310"),
+                            Id = new Guid("b1b263b4-c588-4add-89c2-eded5632d0a1"),
                             Description = "A Forum for the Star Wars movies.",
                             Name = "sw_forum"
                         },
                         new
                         {
-                            Id = new Guid("f793b4b2-c484-4571-8e1f-a1f6a1c1250b"),
+                            Id = new Guid("89816887-fdff-4c0f-90d0-05178002fe46"),
                             Description = "A Forum for the Harry Potter movies.",
                             Name = "hp_forum"
                         });
+                });
+
+            modelBuilder.Entity("ForumsService.Domain.Entities.ThreadDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ForumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ForumId");
+
+                    b.ToTable("Threads");
+                });
+
+            modelBuilder.Entity("ForumsService.Domain.Entities.ThreadDto", b =>
+                {
+                    b.HasOne("ForumsService.Domain.Entities.ForumDto", "Forum")
+                        .WithMany("Threads")
+                        .HasForeignKey("ForumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Forum");
+                });
+
+            modelBuilder.Entity("ForumsService.Domain.Entities.ForumDto", b =>
+                {
+                    b.Navigation("Threads");
                 });
 #pragma warning restore 612, 618
         }
