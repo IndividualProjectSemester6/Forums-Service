@@ -4,6 +4,7 @@ using ForumsService.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForumsService.API.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    partial class ForumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221206164537_Local")]
+    partial class Local
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,19 +45,19 @@ namespace ForumsService.API.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5d5199cc-fd32-4f57-9106-fa1de98e5859"),
+                            Id = new Guid("8e0b0cee-0e4a-498c-a429-faece79c5722"),
                             Description = "A Forum for the Dune movie.",
                             Name = "dune_forum"
                         },
                         new
                         {
-                            Id = new Guid("e9039d6e-82ab-4bec-8fbe-387062c2a76c"),
+                            Id = new Guid("6d61e13a-ccc5-4f00-add9-a31b9a8f3ad1"),
                             Description = "A Forum for the Star Wars movies.",
                             Name = "sw_forum"
                         },
                         new
                         {
-                            Id = new Guid("b2b715cb-1c17-4d4d-a269-8bcbe7734fc1"),
+                            Id = new Guid("90d307e6-7710-4f51-8d00-f13bd6eae519"),
                             Description = "A Forum for the Harry Potter movies.",
                             Name = "hp_forum"
                         });

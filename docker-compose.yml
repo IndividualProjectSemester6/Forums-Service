@@ -8,4 +8,11 @@ services:
       dockerfile: ./Dockerfile
     ports:
     - 5001:80
-
+  db:
+    container_name: "forums_db"
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1433"
+    environment:
+      MSSQL_SA_PASSWORD: "Admin123!"
+      ACCEPT_EULA: "Y"
