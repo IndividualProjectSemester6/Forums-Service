@@ -15,20 +15,12 @@ namespace ForumsService.Application.Messaging.Consumers
             _mediator = mediator;
         }
 
-        /*private readonly ICommandForumRepository _repository;
-
-        public ThreadCreatedConsumer(ICommandForumRepository repository)
-        {
-            _repository = repository;
-        }*/
-
         public async Task Consume(ConsumeContext<ThreadCreatedNotification> context)
         {
             var message = context.Message;
             await Console.Out.WriteLineAsync($"Message from Producer : {message}");
             var command = new AddThreadToForumCommand(new ThreadDto() { Id = message.Id }, message.ForumId);
             await _mediator.Send(command);
-            //await _repository.AddThreadToForum(new ThreadDto() { Id = message.Id }, message.ForumId);
         }
     }
 }
